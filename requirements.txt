@@ -4,5 +4,5 @@ wget
 tensorflow
 keras
 requests
-pandas
 matplotlib
+Pillow
