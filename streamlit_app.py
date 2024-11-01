@@ -2,11 +2,9 @@
 import streamlit as st
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img
+from tensorflow.keras.preprocessing.image import img_to_array
 import numpy as np
-import pandas as pd
 import os
-import matplotlib.pyplot as plt
 from PIL import Image
 
 # Título de la aplicación
@@ -66,7 +64,8 @@ st.header("3. Clasificación de la Imagen")
 if st.button("Clasificar Imagen") and uploaded_file is not None:
     # Preprocesamiento de la imagen cargada
     try:
-        image_resized = image.resize((150, 150))  # Redimensiona la imagen a 150x150
+        # Asegúrate de que la imagen tenga 3 canales
+        image_resized = image.convert('RGB').resize((150, 150))  # Redimensiona y convierte a RGB
         img_array = img_to_array(image_resized) / 255.0  # Normaliza la imagen
         img_array = np.expand_dims(img_array, axis=0)  # Agrega la dimensión para el batch
 
