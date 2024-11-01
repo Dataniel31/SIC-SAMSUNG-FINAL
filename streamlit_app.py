@@ -65,13 +65,15 @@ else:
 st.header("3. Clasificación de la Imagen")
 if st.button("Clasificar Imagen") and uploaded_file is not None:
     # Preprocesamiento de la imagen cargada
-    img_array = img_to_array(image.resize((150, 150))) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    try:
+        image_resized = image.resize((150, 150))  # Redimensiona la imagen a 150x150
+        img_array = img_to_array(image_resized) / 255.0  # Normaliza la imagen
+        img_array = np.expand_dims(img_array, axis=0)  # Agrega la dimensión para el batch
 
-    # Realizar la predicción
-    prediction = model.predict(img_array)
-    pred_class = "PNEUMONIA" if prediction[0][0] > 0.5 else "NORMAL"
-    st.write(f"**Predicción**: {pred_class}")
-
-    # Mostrar la probabilidad de neumonía
-    st.write(f"Probabilidad de neumonía: {prediction[0][0]:.2f}")
+        # Realizar la predicción
+        prediction = model.predict(img_array)
+        pred_class = "PNEUMONIA" if prediction[0][0] > 0.5 else "NORMAL"
+        st.write(f"**Predicción**: {pred_class}")
+        st.write(f"Probabilidad de neumonía: {prediction[0][0]:.2f}")
+    except Exception as e:
+        st.error(f"Ocurrió un error durante la predicción: {str(e)}")
